@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.kakarrot.dao.boardMapper">
+	<select id="selectOne" resultType="org.kakarrot.domain.BoardVO">
+		select * from tbl_board
+		where
+		bno = #{bno}
+	</select>
+
+	<select id="selectList" resultType="org.kakarrot.domain.BoardVO">
+   <![CDATA[
+		select * from
+		(select rownum rn,tb.* from
+		(select * from tbl_board
+		order by bno desc) tb
+		where rownum <=#{page}*#{amount})
+		where rn >= (#{page}-1) * #{amount}
+		]]>
+	</select>
+
+	<insert id="insert">
+		insert into tbl_board(bno,title,content,writer)
+		values(seq_board.nextval,#{title},#{content},#{writer})
+	</insert>
+
+
+
+</mapper>
